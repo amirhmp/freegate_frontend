@@ -1,0 +1,35 @@
+th {
+  border-radius: 5px;
+}
+
+td,
+th {
+  border: 2px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  text-align: center;
+  background-color: white;
+}
+
+tr:nth-child(even) {
+  background-color: darkslateblue;
+}
+
+.my-table {
+  font-family: "iransans";
+  border-collapse: collapse;
+  width: 80%;
+  margin: 30px auto;
+}
+
+a {
+  text-decoration: none;
+  color: darkblue;
+  transform: rotate(20deg);
+  transition: 0.2s all;
+}
+
+a:hover {
+  color: goldenrod;
+  font-size: 20px;
+}
