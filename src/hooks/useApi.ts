@@ -1,25 +1,24 @@
-import { useEffect, useRef, useState } from "react";
 import APIError from "@models/ApiError";
 import { ApiResult } from "@models/ApiResult";
+import { useEffect, useRef, useState } from "react";
 
-type APIFunc<O, I> = (...args: I[]) => Promise<ApiResult<O>>;
-type DataOfAPIFunc<O> = Awaited<ReturnType<APIFunc<O, any>>>["data"];
+type APIFunc<O> = (...args: any[]) => Promise<ApiResult<O>>;
+type IFunc<F extends APIFunc<any>> = Parameters<F>;
+type OFunc<F extends APIFunc<any>> = Awaited<ReturnType<F>>["data"];
 
-function useApi<O, I>(
-  apiFunc: APIFunc<O, I>,
-  preSetData?: (data: DataOfAPIFunc<O>) => DataOfAPIFunc<O>,
-  initialData?: DataOfAPIFunc<O>
+function useApi<F extends APIFunc<any>>(
+  apiFunc: F,
+  onSuccess?: (data: NonNullable< OFunc<F>>, ...args: IFunc<F>) => OFunc<F>,
+  onFail?: (error: APIError, ...args: IFunc<F>) => APIError | undefined,
+  initialData?: OFunc<F>
 ) {
   const isUnMounted = useRef(false);
   const [isLoading, setLoading] = useState(false);
-  const [data, setData] = useState<DataOfAPIFunc<O> | undefined>(
+  const [data, setData] = useState<OFunc<F> | undefined>(
     initialData || undefined
   );
 
   const [error, setError] = useState<APIError | undefined>(undefined);
-
-  // const { isConnected, isInternetReachable } = useNetInfo();
-  // const { isNoNetworkDialogVisible, setNetworkDialogVisibility } = useNetworkStateContext();
 
   useEffect(() => {
     isUnMounted.current = false;
@@ -28,24 +27,21 @@ function useApi<O, I>(
     };
   }, []);
 
-  const request: (...args: Parameters<APIFunc<O, I>>) => void = (
-    ...args: any[]
-  ) => {
-    // if (isConnected === false) return setNetworkDialogVisibility(true);
+  const request: (...args: IFunc<F>) => void = (...args) => {
     setLoading(true);
     apiFunc(...args)
       .then((response) => {
         if (isUnMounted.current) {
-          console.log("unmounted");
           return;
         }
 
         const { success, error, data } = response;
         if (success) {
           setError(undefined);
-          setData(preSetData ? preSetData(data) : data);
+          setData(onSuccess ? onSuccess(data, ...args) : data);
         } else {
-          setError(error);
+          const _error = onFail ? onFail(error!, ...args) : error;
+          setError(_error);
         }
       })
       .catch((_error) => {

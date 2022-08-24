@@ -24,7 +24,7 @@ interface IProps {
 */
 const NestedTable: React.FC<IProps> = ({
   data,
-  schema,
+  schema: _schema,
   separatorStyle,
   tableStyle,
   className,
@@ -36,14 +36,17 @@ const NestedTable: React.FC<IProps> = ({
   const colNextRenderIndex: number[] = [];
   let maxSpan = 0;
 
-  if (reverse) schema.reverse();
-
-  console.log(schema);
+  let schema = _schema;
+  if (reverse) {
+    schema = [..._schema].reverse(); //age copy nakonim asl array reverse mishe va har bar ke componentDidUpdate mishe reverse mikone
+  } 
 
   const colsFlattedData = schema.map((col, i) => {
     indices.push(0);
     colNextRenderIndex.push(0);
-    const flatted = !col.path ? data as any[] : flatNestedArray(data, ...col.path);
+    const flatted = !col.path
+      ? (data as any[])
+      : flatNestedArray(data, ...col.path);
     if (flatted.length > maxRowsCount) {
       maxRowsCount = flatted.length;
       indexOfColWithMaxRows = i;

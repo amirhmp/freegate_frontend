@@ -8,11 +8,14 @@ import NotFound from "@pages/notFound";
 import Profile from "@pages/Profile";
 import SignIn from "@pages/SignIn";
 import { ApiClientConfig } from "@services/apiclient/ApiClient";
+import React, { useLayoutEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "./App.css";
 
 const App = () => {
+ 
+
   const { user, logout } = useAuth();
   if (user) ApiClientConfig.setClientToken(user.token);
   else ApiClientConfig.setClientToken(undefined);

@@ -1,12 +1,12 @@
-import { z } from 'zod';
 import Role from "@constants/Role";
 
-export default interface User {
+type GetAllUsersResponse = Array<{
   id: number;
   name: string;
   mobile: string;
-  token: string;
   role: Role;
   centerID: number;
   centerName: string;
-}
+}>;
+
+export default GetAllUsersResponse;

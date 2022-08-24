@@ -1,9 +1,24 @@
+import Center from "@models/Center";
+import {
+  CreateUserResponseDtoType,
+  transformCreateUserResponseDto,
+} from "@DTOs/api/CreateUserResponseDto";
+import {
+  GetAllUsersResponseDtoType,
+  transformGetAllUsersResponseDto,
+} from "@DTOs/api/GetAllUsersResponseDto";
 import {
   ProfileResponseDto,
   ProfileResponseDtoType,
 } from "@DTOs/api/ProfileResponseDto";
 import { ApiResult, failed, succeed } from "@models/ApiResult";
+import CreateUserResponse from "@models/CreateUserResponse";
 import LoginRequest from "@models/DTOs/api/LoginRequest";
+import {
+  CenterDto,
+  CenterDtoType,
+  transformCenterDto,
+} from "@models/DTOs/CenterDto";
 import User from "@models/User";
 import HttpService from "@services/HttpService";
 import { z } from "zod";
@@ -46,7 +61,49 @@ const ApiClient: IApiClient = {
     return succeed(user);
   },
   getAllUsers: async () => {
-    throw new Error("not yet implemented");
+    return await service.request({
+      url: "users",
+      method: "get",
+      validator: GetAllUsersResponseDtoType,
+      transformer: transformGetAllUsersResponseDto,
+    });
+  },
+
+  createUser: async (request): Promise<ApiResult<CreateUserResponse>> => {
+    return await service.request({
+      url: "users",
+      method: "post",
+      requestBody: request,
+      validator: CreateUserResponseDtoType,
+      transformer: transformCreateUserResponseDto,
+    });
+  },
+
+  updateUser: async (id, request): Promise<ApiResult<CreateUserResponse>> => {
+    return await service.request({
+      url: `users/${id}`,
+      method: "put",
+      requestBody: request,
+      validator: CreateUserResponseDtoType,
+      transformer: transformCreateUserResponseDto,
+    });
+  },
+  deleteUser: async (id: number): Promise<ApiResult<CreateUserResponse>> => {
+    return await service.request({
+      url: `users/${id}`,
+      method: "delete",
+      validator: CreateUserResponseDtoType,
+      transformer: transformCreateUserResponseDto,
+    });
+  },
+
+  fetchCenters: async (): Promise<ApiResult<Center[]>> => {
+    return await service.request<CenterDto[], Center[]>({
+      url: `centers`,
+      method: "get",
+      validator: z.array(CenterDtoType),
+      transformer: (dtos) => dtos.map((dto) => transformCenterDto(dto)),
+    });
   },
 };
 

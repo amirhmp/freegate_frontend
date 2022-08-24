@@ -1,12 +1,10 @@
-import { z } from 'zod';
 import Role from "@constants/Role";
 
-export default interface User {
+export default interface CreateUserResponse {
   id: number;
   name: string;
   mobile: string;
-  token: string;
-  role: Role;
   centerID: number;
   centerName: string;
+  role: Role;
 }

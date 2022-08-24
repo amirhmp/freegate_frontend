@@ -6,6 +6,7 @@ export const ProfileResponseDtoType = z.object({
   name: z.string(),
   mobile: z.string(),
   centerID: z.number(),
+  centerName: z.string(),
   roleID: z.nativeEnum(Role),
 });
 
