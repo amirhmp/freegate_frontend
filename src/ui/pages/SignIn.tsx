@@ -1,5 +1,6 @@
 import bgImage from "@assets/pics/bg4.jpg";
 import AppRoutes from "@constants/appRoutes";
+import Role from "@constants/Role";
 import useAuth from "@context/useAuth";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Avatar from "@mui/material/Avatar";
@@ -18,6 +19,7 @@ import RemoteRepo from "@services/RemoteRepo";
 import snack from "@ui/components/common/Snack";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Copyright(props: any) {
   return (
@@ -51,8 +53,6 @@ export default function SignIn() {
     const password = data.get("password");
     const m = mobile?.toString().trim() || "";
     const p = password?.toString().trim() || "";
-
-    console.log("P:", p, "m:", m);
     if (m.length === 0 || p.length === 0)
       return snack("لطفا نام کاربری و رمز عبور خود را وارد کنید");
 
@@ -67,8 +67,13 @@ export default function SignIn() {
     });
 
     if (result.success) {
-      login(result.data!);
-      navigate(AppRoutes.Home);
+      if (result.data!.role === Role.SuperAdmin) {
+        login(result.data!);
+        toast.dismiss();
+        navigate(AppRoutes.Home);
+      } else {
+        snack("شما به این پنل دسترسی ندارید");
+      }
     } else {
       snack(result.error!.message);
     }

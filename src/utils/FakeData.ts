@@ -35,7 +35,6 @@ export const fakeCenters: Center[] = [
   },
 ];
 
-
 export const fakeUser: User = {
   id: 123,
   name: "امیرحسین مهدی پور",
@@ -54,6 +53,8 @@ export const FakeGetUserResponse: GetAllUsersResponse = [
     role: Role.SuperAdmin,
     centerID: 1,
     centerName: "بافق",
+    password: "1221",
+    isEnable: false,
   },
   {
     id: 2,
@@ -62,5 +63,7 @@ export const FakeGetUserResponse: GetAllUsersResponse = [
     role: Role.Admin,
     centerID: 2,
     centerName: "ابرکوه",
+    password: "1221",
+    isEnable: true,
   },
 ];

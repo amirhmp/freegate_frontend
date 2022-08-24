@@ -6,7 +6,9 @@ type GetAllUsersResponse = Array<{
   mobile: string;
   role: Role;
   centerID: number;
-  centerName: string;
+  centerName: string | null;
+  password: string;
+  isEnable: boolean;
 }>;
 
 export default GetAllUsersResponse;

@@ -40,7 +40,7 @@ export default class HttpService {
     else this.token = null;
   }
 
-  setOnUnAuthorizedListener(onUnAuthorized: () => void) {
+  setOnUnAuthorizedListener(onUnAuthorized: (() => void) | undefined) {
     this.onUnAuthorized = onUnAuthorized;
   }
 

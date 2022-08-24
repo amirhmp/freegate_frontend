@@ -1,22 +1,15 @@
 import Card from "@components/common/Card";
-import AppRoutes from "@constants/appRoutes";
-import useAuth from "@context/useAuth";
-import { useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
 import Role from "@constants/Role";
+import useAuth from "@context/useAuth";
+import { Button } from "@mui/material";
 import AlertDialog from "@ui/components/common/AlertDialog";
 import { useState } from "react";
 
 const Profile = () => {
-  const navigate = useNavigate();
   const { logout, user } = useAuth();
 
   const [open, setOpen] = useState(false);
 
-  const handleLogout = () => {
-    logout();
-    navigate(AppRoutes.Login);
-  };
   return (
     <div>
       <Card
@@ -50,7 +43,7 @@ const Profile = () => {
       <AlertDialog
         title={"خروج"}
         description={"آیا از حساب کاربری خود خارج میشوید؟"}
-        action={handleLogout}
+        action={logout}
         open={open}
         onCloseClicked={() => setOpen(false)}
       />

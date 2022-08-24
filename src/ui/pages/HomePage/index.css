@@ -23,18 +23,6 @@ tr:nth-child(even) {
   width: 100%;
 }
 
-a {
-  text-decoration: none;
-  color: darkblue;
-  transform: rotate(20deg);
-  transition: 0.2s all;
-}
-
-a:hover {
-  color: goldenrod;
-  font-size: 20px;
-}
-
 .container {
   width: 80%;
   margin: 30px auto;

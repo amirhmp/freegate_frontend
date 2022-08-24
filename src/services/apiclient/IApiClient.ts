@@ -18,5 +18,6 @@ export default interface IApiClient {
   ) => Promise<ApiResult<CreateUserResponse>>;
 
   deleteUser: (id: number) => Promise<ApiResult<CreateUserResponse>>;
+  disableUser: (id: number, isDisable: boolean) => Promise<ApiResult<CreateUserResponse>>;
   fetchCenters: () => Promise<ApiResult<Center[]>>;
 }

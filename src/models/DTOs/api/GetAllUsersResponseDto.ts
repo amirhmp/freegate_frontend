@@ -9,17 +9,21 @@ export const GetAllUsersResponseDtoType = z.array(
     mobile: z.string(),
     roleID: z.nativeEnum(Role),
     centerID: z.number(),
-    centerName: z.string(),
+    centerName: z.string().nullable(),
+    password: z.string(),
+    isEnable: z.boolean(),
   })
 );
 
 export type GetAllUsersResponseDto = z.infer<typeof GetAllUsersResponseDtoType>;
 
-export const transformGetAllUsersResponseDto = (dtos: GetAllUsersResponseDto): GetAllUsersResponse => {
-  return dtos.map(dto => {
-    return  {
+export const transformGetAllUsersResponseDto = (
+  dtos: GetAllUsersResponseDto
+): GetAllUsersResponse => {
+  return dtos.map((dto) => {
+    return {
       ...dto,
-      role: dto.roleID
-    }
-  })
-}
+      role: dto.roleID,
+    };
+  });
+};

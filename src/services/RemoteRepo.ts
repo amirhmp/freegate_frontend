@@ -1,7 +1,7 @@
-import FakeApiClient from "./apiclient/FakeApiClient";
+import ApiClient from "./apiclient/ApiClient";
 
 const RemoteRepo = {
-  ...FakeApiClient,
+  ...ApiClient,
 };
 
 export default RemoteRepo;

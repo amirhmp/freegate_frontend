@@ -37,6 +37,7 @@ const FakeApiClient: IApiClient = {
       id: 1,
       centerName: "بافق",
       role: fakeUser.role,
+      isEnable: true,
       ...req,
     });
   },
@@ -55,13 +56,23 @@ const FakeApiClient: IApiClient = {
       id,
       centerName: "بافق",
       role: fakeUser.role,
+      isEnable: true,
       ...req,
     });
   },
 
-  deleteUser: async (id: number): Promise<ApiResult<User>> => {
+  deleteUser: async (id: number): Promise<ApiResult<CreateUserResponse>> => {
     await delay(1000);
-    return succeed(fakeUser);
+    return succeed({
+      id: fakeUser.id,
+      centerID: fakeUser.centerID,
+      mobile: fakeUser.mobile,
+      centerName: fakeUser.centerName,
+      name: fakeUser.name,
+      role: fakeUser.role,
+      password: "1221",
+      isEnable: true,
+    });
   },
 
   fetchCenters: async (): Promise<ApiResult<Array<Center>>> => {
@@ -72,6 +83,18 @@ const FakeApiClient: IApiClient = {
     //   type: ErrorType.UnAuthorized,
     // });
     return succeed(fakeCenters);
+  },
+  disableUser: async () => {
+    return succeed({
+      id: fakeUser.id,
+      centerID: fakeUser.centerID,
+      mobile: fakeUser.mobile,
+      centerName: fakeUser.centerName,
+      name: fakeUser.name,
+      role: fakeUser.role,
+      password: "1221",
+      isEnable: true,
+    });
   },
 };
 export default FakeApiClient;

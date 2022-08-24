@@ -8,5 +8,5 @@ export default interface User {
   token: string;
   role: Role;
   centerID: number;
-  centerName: string;
+  centerName: string | null;
 }

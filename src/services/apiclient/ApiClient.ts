@@ -24,7 +24,9 @@ import HttpService from "@services/HttpService";
 import { z } from "zod";
 import IApiClient from "./IApiClient";
 
-const service = new HttpService("http://10.144.60.50:3020/api/");
+// const service = new HttpService("http://10.144.60.50:3020/api/");
+// const service = new HttpService("http://localhost:3020/api/");
+const service = new HttpService("http://192.168.100.193:3020/api/");
 
 const getProfile = async (): Promise<ApiResult<ProfileResponseDto>> => {
   return await service.request<any, any>({
@@ -97,6 +99,16 @@ const ApiClient: IApiClient = {
     });
   },
 
+  disableUser: async (id: number, isDisable: boolean) => {
+    return await service.request({
+      url: `users/${id}`,
+      method: "put",
+      requestBody: { isEnable: !isDisable },
+      validator: CreateUserResponseDtoType,
+      transformer: transformCreateUserResponseDto,
+    });
+  },
+
   fetchCenters: async (): Promise<ApiResult<Center[]>> => {
     return await service.request<CenterDto[], Center[]>({
       url: `centers`,
@@ -109,7 +121,7 @@ const ApiClient: IApiClient = {
 
 const setClientToken = (token: string | undefined) => service.setToken(token);
 
-const setOnUnAuthorized = (onUnAuthorizedListener: () => void) =>
+const setOnUnAuthorized = (onUnAuthorizedListener: (() => void) | undefined) =>
   service.setOnUnAuthorizedListener(onUnAuthorizedListener);
 
 export const ApiClientConfig = {

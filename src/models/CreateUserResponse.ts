@@ -5,6 +5,8 @@ export default interface CreateUserResponse {
   name: string;
   mobile: string;
   centerID: number;
-  centerName: string;
+  centerName: string | null;
   role: Role;
+  password: string;
+  isEnable: boolean;
 }

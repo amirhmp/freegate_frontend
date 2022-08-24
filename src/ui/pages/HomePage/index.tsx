@@ -3,6 +3,7 @@ import NestedTable, { TableSchema } from "@components/common/NestedTable";
 import Role from "@constants/Role";
 import CreateUserRequest from "@DTOs/api/CreateUserRequest";
 import useApi from "@hooks/useApi";
+import GetAllUsersResponse from "@models/GetAllUsersResponse";
 import User from "@models/User";
 import AddIcon from "@mui/icons-material/Add";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -11,12 +12,15 @@ import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import Fab from "@mui/material/Fab";
 import Modal from "@mui/material/Modal";
+import Switch from "@mui/material/Switch";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import RemoteRepo from "@services/RemoteRepo";
+import AlertDialog from "@ui/components/common/AlertDialog";
 import FloatLabelTextField from "@ui/components/common/FloatLabelTextField";
 import RtlMui from "@ui/components/common/RtlMui";
 import snack from "@ui/components/common/Snack";
+import { ArrayElement } from "@utils/utils";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import "./index.css";
@@ -37,7 +41,7 @@ const HomePage = () => {
     data: users,
     isLoading,
     request: fetchUsers,
-    setData,
+    setData: setUsers,
   } = useApi(RemoteRepo.getAllUsers, undefined, (error) => {
     snack(error.message, fetchUsers);
     return undefined;
@@ -48,7 +52,7 @@ const HomePage = () => {
     (response) => {
       const foundIndex = users!.findIndex((u) => u.id === response.id);
       users!.splice(foundIndex, 1);
-      setData([...users!]);
+      setUsers([...users!]);
       return undefined;
     },
     (error, id) => {
@@ -61,7 +65,7 @@ const HomePage = () => {
     RemoteRepo.createUser,
     (response) => {
       setOpen(false);
-      setData([
+      setUsers([
         ...users!,
         {
           ...response,
@@ -76,10 +80,7 @@ const HomePage = () => {
     }
   );
 
-  const { 
-    isLoading: updateUserRequestLoading,
-    request: updateUser,
-  } = useApi(
+  const { isLoading: updateUserRequestLoading, request: updateUser } = useApi(
     RemoteRepo.updateUser,
     (response) => {
       if (response) {
@@ -88,7 +89,7 @@ const HomePage = () => {
         const _users = [...users!];
         const foundIndex = _users.findIndex((u) => u.id === response.id);
         _users[foundIndex] = response;
-        setData(_users);
+        setUsers(_users);
         setUser({} as CreateUserRequest);
       }
       return undefined;
@@ -108,15 +109,69 @@ const HomePage = () => {
     return undefined;
   });
 
+  const { request: disableUser } = useApi(
+    RemoteRepo.disableUser,
+    undefined,
+    (error, id, isDisable) => {
+      disableUserInUI(id, !isDisable);
+      snack(error.message, () => handleUserDisable(id, isDisable));
+      return undefined;
+    }
+  );
+
   useEffect(() => {
-    fetchUsers();
-    fetchCenters();
+    if (!users) fetchUsers();
+    if (!centers) fetchCenters();
   }, []);
+
+  const disableUserInUI = (userID: number, isDisable: boolean) => {
+    const _users = [...users!];
+    const _user = _users.find((u) => u.id === userID);
+    console.log(_user);
+    _user!.isEnable = !isDisable;
+    setUsers(_users);
+  };
+
+  const handleUserDisable = (userID: number, isDisable: boolean) => {
+    disableUserInUI(userID, isDisable);
+    disableUser(userID, isDisable);
+  };
+
+  const handleClose = () => {
+    userToUpdate.current = undefined;
+    setUser({} as CreateUserRequest);
+    setOpen(false);
+  };
+
+  const handleOnCentersComboClicked = () => {
+    if (!centers || centers.length === 0) fetchCenters();
+  };
+
+  const handleSubmit = () => {
+    toast.dismiss();
+    //validate
+    if (!user.name || user.name.length < 4)
+      return snack("نام کاربری کوتاه میباشد");
+    if (!user.mobile || user.mobile.length !== 11)
+      return snack("تلفن همراه صحیح نمیباشد");
+    if (!user.password || user.password.length < 4)
+      return snack("گذرواژه کوتاه میباشد");
+    if (!user.roleID) return snack("سمت را مشخص کنید");
+    if (user.roleID === Role.User) {
+      if (!user.centerID) return snack("مرکز را مشخص کنید");
+    } else {
+      user.centerID = 0;
+    }
+
+    //
+    if (userToUpdate.current) updateUser(userToUpdate.current, user);
+    else createUser(user);
+  };
 
   const schema: TableSchema = [
     {
       label: "نام کاربر",
-      extractor: (user: User) => (
+      extractor: (user: ArrayElement<GetAllUsersResponse>) => (
         <Button
           onClick={() => {
             setUser({
@@ -124,7 +179,7 @@ const HomePage = () => {
               mobile: user.mobile,
               name: user.name,
               roleID: user.role,
-              password: "",
+              password: user.password,
             });
             userToUpdate.current = user.id;
             setOpen(true);
@@ -139,15 +194,15 @@ const HomePage = () => {
     },
     {
       label: "شماره تلفن",
-      extractor: (user: User) => user.mobile,
+      extractor: (user: ArrayElement<GetAllUsersResponse>) => user.mobile,
     },
     {
       label: "مرکز",
-      extractor: (user: User) => user.centerName,
+      extractor: (user: ArrayElement<GetAllUsersResponse>) => user.centerName,
     },
     {
       label: "سمت",
-      extractor: (user: User) => {
+      extractor: (user: ArrayElement<GetAllUsersResponse>) => {
         const { role } = user;
         if (role === Role.SuperAdmin) return "مدیر سیستم";
         if (role === Role.Admin) return "مدیریت";
@@ -157,16 +212,16 @@ const HomePage = () => {
     },
     {
       label: "",
-      extractor: (user: User) => (
+      extractor: (user: ArrayElement<GetAllUsersResponse>) => (
         <Button
           color="error"
           onClick={() =>
             snack(
-              "کاربر حذف میشود. ادامه میدهید؟",
+              `کاربر "${user.name}" حذف میشود. ادامه میدهید؟`,
               () => deleteUser(user.id),
               "حذف کاربر",
               {
-                actionColor: "red",
+                actionColor: "tomato",
                 messageColor: "tomato",
               },
               10000
@@ -177,35 +232,20 @@ const HomePage = () => {
         </Button>
       ),
     },
+    {
+      label: "فعال بودن",
+      extractor: (user: ArrayElement<GetAllUsersResponse>) => {
+        return (
+          <Switch
+            checked={user.isEnable}
+            onChange={(_, enabled) => {
+              handleUserDisable(user.id, !enabled);
+            }}
+          />
+        );
+      },
+    },
   ];
-
-  const handleClose = () => {
-    userToUpdate.current = undefined;
-    setUser({} as CreateUserRequest);
-    setOpen(false);
-  };
-
-  const handleOnCentersComboClicked = () => {
-    if (!centers) fetchCenters();
-  };
-
-  const validateRequest = () => {
-    if (!user.name || user.name.length < 4)
-      return snack("نام کاربری کوتاه میباشد");
-    if (!user.mobile || user.mobile.length !== 11)
-      return snack("تلفن همراه صحیح نمیباشد");
-    if (!user.password || user.password.length < 4)
-      return snack("گذرواژه کوتاه میباشد");
-    if (!user.centerID) return snack("مرکز را مشخص کنید");
-    if (!user.roleID) return snack("سمت را مشخص کنید");
-  };
-
-  const handleSubmit = () => {
-    toast.dismiss();
-    validateRequest();
-    if (userToUpdate.current) updateUser(userToUpdate.current, user);
-    else createUser(user);
-  };
 
   if (isLoading && !users) return <Loading />;
   if (!isLoading && users) {
@@ -245,10 +285,11 @@ const HomePage = () => {
               position: "absolute",
               top: "50%",
               left: "50%",
+              width: "70%",
+              maxWidth: "450px",
+              minWidth: "300px",
               transform: "translate(-50%, -50%)",
-              width: `30%`,
               height: "600px",
-              minWidth: "200px",
               bgcolor: "white",
               borderRadius: 4,
               boxShadow: 24,
@@ -288,9 +329,24 @@ const HomePage = () => {
                 label="گذرواژه"
                 onChange={(password) => setUser({ ...user, password })}
               />
+              <RtlMui>
+                <Autocomplete
+                  value={roles[user.roleID - 1] || null}
+                  onChange={(event, value) =>
+                    value && setUser({ ...user, roleID: value.role })
+                  }
+                  disablePortal
+                  options={roles}
+                  sx={{ minWidth: 200 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="سمت" />
+                  )}
+                />
+              </RtlMui>
               <Box sx={{ position: "relative" }}>
                 <RtlMui>
                   <Autocomplete
+                    disabled={!(user.roleID && user.roleID === Role.User)}
                     onFocus={handleOnCentersComboClicked}
                     value={centers?.find((c) => c.id === user.centerID) || null}
                     onChange={(event, value) =>
@@ -322,20 +378,6 @@ const HomePage = () => {
                   </Box>
                 )}
               </Box>
-              <RtlMui>
-                <Autocomplete
-                  value={roles[user.roleID - 1] || null}
-                  onChange={(event, value) =>
-                    value && setUser({ ...user, roleID: value.role })
-                  }
-                  disablePortal
-                  options={roles}
-                  sx={{ minWidth: 200 }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="سمت" />
-                  )}
-                />
-              </RtlMui>
             </Box>
             <Box
               sx={{

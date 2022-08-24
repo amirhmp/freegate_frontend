@@ -1,6 +1,5 @@
 import Role from "@constants/Role";
 import CreateUserResponse from "@models/CreateUserResponse";
-import { domainToASCII } from "url";
 import { z } from "zod";
 
 export const CreateUserResponseDtoType = z.object({
@@ -8,8 +7,10 @@ export const CreateUserResponseDtoType = z.object({
   name: z.string(),
   mobile: z.string(),
   centerID: z.number(),
-  centerName: z.string(),
+  centerName: z.string().nullable(),
   roleID: z.nativeEnum(Role),
+  password: z.string(),
+  isEnable: z.boolean(),
 });
 
 export type CreateUserResponseDto = z.infer<typeof CreateUserResponseDtoType>;
