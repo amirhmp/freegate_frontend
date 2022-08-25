@@ -11,7 +11,7 @@ import { ApiClientConfig } from "@services/apiclient/ApiClient";
 import AdminAppBar from "@ui/components/AdminAppbar";
 import snack from "@ui/components/common/Snack";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "./App.css";
 
 const App = () => {
@@ -20,6 +20,7 @@ const App = () => {
   if (user) {
     ApiClientConfig.setClientToken(user.token);
     ApiClientConfig.setOnUnAuthorized(() => {
+      toast.dismiss();
       snack(
         "فرد دیگری با حساب کاربری شما وارد شده است. شما نیاز به ورود مجدد دارید."
       );
