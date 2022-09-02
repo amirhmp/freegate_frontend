@@ -1,5 +1,4 @@
-import { fakeUser } from "@utils/FakeData";
-import User from "../models/User";
+import User from "@models/User";
 
 const key = "auth";
 
@@ -17,8 +16,10 @@ const removeUser = () => {
   localStorage.removeItem(key);
 };
 
-export default {
+const authStorage = {
   getUserFromStore,
   storeUser,
   removeUser,
 };
+
+export default authStorage;

@@ -23,10 +23,9 @@ import User from "@models/User";
 import HttpService from "@services/HttpService";
 import { z } from "zod";
 import IApiClient from "./IApiClient";
-
-// const service = new HttpService("http://10.144.60.50:3020/api/");
-const service = new HttpService("http://localhost:3020/api/");
-// const service = new HttpService("http://192.168.100.193:3020/api/");
+import { BASE_API_URL } from "@config";
+ 
+const service = new HttpService(BASE_API_URL);
 
 const getProfile = async (): Promise<ApiResult<ProfileResponseDto>> => {
   return await service.request<any, any>({
@@ -127,7 +126,10 @@ const ApiClient: IApiClient = {
   },
 };
 
-const setClientToken = (token: string | undefined) => service.setToken(token);
+const setClientToken = (token: string | undefined) => {
+  console.log("debug:" + token);
+  service.setToken(token);
+};
 
 const setOnUnAuthorized = (onUnAuthorizedListener: (() => void) | undefined) =>
   service.setOnUnAuthorizedListener(onUnAuthorizedListener);

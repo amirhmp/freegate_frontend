@@ -2,6 +2,7 @@ const path = require(`path`);
 
 const aliases = {
   "@assets": "./src/assets",
+  "@config": "./src/config/index.ts",
   "@constants": "./src/constants",
   "@context": "./src/context",
   "@hooks": "./src/hooks",

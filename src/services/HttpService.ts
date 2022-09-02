@@ -8,6 +8,7 @@ import APIError, {
   getErrorTypeByCode,
 } from "@models/ApiError";
 import { ApiResult, failed } from "@models/ApiResult";
+import { NODE_ENV } from "@config";
 
 export interface IRequest<S, D> {
   url: string;
@@ -24,15 +25,17 @@ export default class HttpService {
 
   constructor(private baseURL: string) {
     this._axios = axios.create();
-    this._axios.interceptors.request.use(
-      AxiosLogger.requestLogger,
-      AxiosLogger.errorLogger
-    );
-    this._axios.interceptors.response.use(
-      AxiosLogger.responseLogger,
-      AxiosLogger.errorLogger
-    );
     this._axios.defaults.timeout = 10000;
+    if (NODE_ENV === "development") {
+      this._axios.interceptors.request.use(
+        AxiosLogger.requestLogger,
+        AxiosLogger.errorLogger
+      );
+      this._axios.interceptors.response.use(
+        AxiosLogger.responseLogger,
+        AxiosLogger.errorLogger
+      );
+    }
   }
 
   setToken(token: string | undefined) {
@@ -66,6 +69,7 @@ export default class HttpService {
         const result = validator.safeParse(response.data);
         if (!result.success) {
           console.log(
+            /* TODO: LOG ON A LOGGING SERVER like SEQ */
             `validator Error: api changed in the server: ${result.error.message}`
           );
           return failed({
@@ -80,8 +84,7 @@ export default class HttpService {
         success: true,
       } as ApiResult<D>;
     } catch (_error: any) {
-      console.log(_error);
-
+      console.log(_error); /* TODO: LOG ON A LOGGING SERVER like SEQ */
       const response = (_error as AxiosError).response;
       //FIXME:TODO: handle timeout and not internet connected
       const errorCode = response?.status || -1;
