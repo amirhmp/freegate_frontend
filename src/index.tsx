@@ -1,7 +1,7 @@
 import AuthContextProvider from "@context/AuthContext";
 import { createTheme, ThemeProvider } from "@mui/material";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
@@ -26,9 +26,9 @@ root.render(
   // <React.StrictMode>
   <ThemeProvider theme={THEME}>
     <AuthContextProvider>
-      <BrowserRouter>
+      <HashRouter>
         <App />
-      </BrowserRouter>
+      </HashRouter>
     </AuthContextProvider>
   </ThemeProvider>
   // </React.StrictMode>
