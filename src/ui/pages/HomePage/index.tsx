@@ -4,7 +4,6 @@ import Role from "@constants/Role";
 import CreateUserRequest from "@DTOs/api/CreateUserRequest";
 import useApi from "@hooks/useApi";
 import GetAllUsersResponse from "@models/GetAllUsersResponse";
-import User from "@models/User";
 import AddIcon from "@mui/icons-material/Add";
 import Autocomplete from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
@@ -16,8 +15,8 @@ import Switch from "@mui/material/Switch";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import RemoteRepo from "@services/RemoteRepo";
-import AlertDialog from "@ui/components/common/AlertDialog";
 import FloatLabelTextField from "@ui/components/common/FloatLabelTextField";
+import OnlineState from "@ui/components/common/OnlineState";
 import RtlMui from "@ui/components/common/RtlMui";
 import snack from "@ui/components/common/Snack";
 import { ArrayElement } from "@utils/utils";
@@ -119,9 +118,20 @@ const HomePage = () => {
     }
   );
 
+  const { data: onlineIDs, request: fetchOnlineUsers } = useApi(
+    RemoteRepo.fetchOnlineUsers
+  );
+
   useEffect(() => {
     if (!users) fetchUsers();
     if (!centers) fetchCenters();
+    fetchOnlineUsers();
+    const handler = setInterval(() => {
+      fetchOnlineUsers();
+    }, 60000);
+    return () => {
+      clearInterval(handler);
+    };
   }, []);
 
   const disableUserInUI = (userID: number, isDisable: boolean) => {
@@ -243,6 +253,12 @@ const HomePage = () => {
             }}
           />
         );
+      },
+    },
+    {
+      label: "آنلاین بودن",
+      extractor: (user: ArrayElement<GetAllUsersResponse>) => {
+        return <OnlineState online={onlineIDs?.includes(user.id)} />;
       },
     },
   ];

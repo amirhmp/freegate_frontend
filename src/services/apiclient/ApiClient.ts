@@ -25,8 +25,8 @@ import { z } from "zod";
 import IApiClient from "./IApiClient";
 
 // const service = new HttpService("http://10.144.60.50:3020/api/");
-// const service = new HttpService("http://localhost:3020/api/");
-const service = new HttpService("http://192.168.100.193:3020/api/");
+const service = new HttpService("http://localhost:3020/api/");
+// const service = new HttpService("http://192.168.100.193:3020/api/");
 
 const getProfile = async (): Promise<ApiResult<ProfileResponseDto>> => {
   return await service.request<any, any>({
@@ -115,6 +115,14 @@ const ApiClient: IApiClient = {
       method: "get",
       validator: z.array(CenterDtoType),
       transformer: (dtos) => dtos.map((dto) => transformCenterDto(dto)),
+    });
+  },
+
+  fetchOnlineUsers: async (): Promise<ApiResult<number[]>> => {
+    return await service.request({
+      url: "users/online",
+      method: "get",
+      validator: z.array(z.number()),
     });
   },
 };

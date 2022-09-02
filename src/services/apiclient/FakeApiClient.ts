@@ -96,5 +96,9 @@ const FakeApiClient: IApiClient = {
       isEnable: true,
     });
   },
+  fetchOnlineUsers: async (): Promise<ApiResult<number[]>> => {
+    await delay(100);
+    return succeed([FakeGetUserResponse[0].id]);
+  },
 };
 export default FakeApiClient;
