@@ -9,7 +9,7 @@ import {
   FetchDashboardDtoType,
 } from "@models/DTOs/api/FetchDashboardDto";
 
-const service = new HttpService(BASE_API_URL + "api");
+const service = new HttpService(BASE_API_URL);
 
 const ApiClient: IApiClient = {
   login: async (request: LoginRequest): Promise<ApiResult<string>> => {

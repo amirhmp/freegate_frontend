@@ -30,8 +30,8 @@ const HomePage = () => {
   });
 
   useEffect(() => {
-    if (!response) fetchDashboard();
-  }, [fetchDashboard, response]);
+    if (!response && !isLoading && !error) fetchDashboard();
+  }, [error, fetchDashboard, isLoading, response]);
 
   if (isLoading && !response) return <Loading />;
 
