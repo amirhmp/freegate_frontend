@@ -15,32 +15,28 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import RemoteRepo from "@services/RemoteRepo";
 import RtlMui from "@ui/components/common/RtlMui";
-import snack from "@ui/components/common/Snack";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function SignIn() {
   const { login } = useAuth();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const { request: userLogin, isLoading: isRequesting } = useApi(
     RemoteRepo.login,
-    (user) => {
- 
-        if (user.role === Role.SuperAdmin) {
-          login(user);
-          toast.dismiss();
-          navigate(AppRoutes.Home);
-        } else {
-          snack("شما به این پنل دسترسی ندارید");
-        }
-     
-
+    (token) => {
+      login(token);
+      toast.dismiss();
+      navigate(AppRoutes.Home);
       return undefined;
     },
     (error) => {
-      snack(error.message);
+      toast.error(
+        error.code === 404
+          ? "نام کاربری یا گذرواژه اشتباه میباشد"
+          : error.message
+      );
       return undefined;
     }
   );
@@ -49,20 +45,18 @@ export default function SignIn() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    const mobile = data.get("mobile");
+    const username = data.get("username");
     const password = data.get("password");
-    const m = mobile?.toString().trim() || "";
+    const u = username?.toString().trim() || "";
     const p = password?.toString().trim() || "";
-    if (m.length === 0 || p.length === 0)
-      return snack("لطفا نام کاربری و رمز عبور خود را وارد کنید");
+    if (u.length === 0 || p.length === 0)
+      return toast.error("لطفا نام کاربری و رمز عبور خود را وارد کنید");
 
-    if (m.length !== 11) {
-      return snack("تلفن همراه وارد شده صحیح نیست");
-    }
-    if (p.length <= 3) return snack("نام کاربری یا پسورد کوتاه است");
+    if (p.length <= 3 || u.length <= 3)
+      return toast.error("نام کاربری یا پسورد کوتاه است");
 
     userLogin({
-      mobile: m,
+      username: u,
       password: p,
     });
   };
@@ -97,9 +91,9 @@ export default function SignIn() {
                 margin="normal"
                 required
                 fullWidth
-                id="mobile"
-                label="تلفن همراه"
-                name="mobile"
+                id="username"
+                label="نام کاربری"
+                name="username"
                 autoFocus
               />
             </RtlMui>

@@ -13,6 +13,9 @@ const root = ReactDOM.createRoot(
 );
 
 const THEME = createTheme({
+  palette: {
+    // mode: "dark",
+  },
   typography: {
     fontFamily: `"iransans"`,
     fontSize: 14,

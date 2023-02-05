@@ -1,5 +1,6 @@
 import APIError from "@models/ApiError";
 import { ApiResult } from "@models/ApiResult";
+import React from "react";
 import { useEffect, useRef, useState } from "react";
 
 type APIFunc<O> = (...args: any[]) => Promise<ApiResult<O>>;
@@ -8,7 +9,7 @@ type OFunc<F extends APIFunc<any>> = Awaited<ReturnType<F>>["data"];
 
 function useApi<F extends APIFunc<any>>(
   apiFunc: F,
-  onSuccess?: (data: NonNullable< OFunc<F>>, ...args: IFunc<F>) => OFunc<F>,
+  onSuccess?: (data: NonNullable<OFunc<F>>, ...args: IFunc<F>) => OFunc<F>,
   onFail?: (error: APIError, ...args: IFunc<F>) => APIError | undefined,
   initialData?: OFunc<F>
 ) {
@@ -27,32 +28,35 @@ function useApi<F extends APIFunc<any>>(
     };
   }, []);
 
-  const request: (...args: IFunc<F>) => void = (...args) => {
-    setLoading(true);
-    apiFunc(...args)
-      .then((response) => {
-        if (isUnMounted.current) {
-          return;
-        }
+  const request: (...args: IFunc<F>) => void = React.useCallback(
+    (...args) => {
+      setLoading(true);
+      apiFunc(...args)
+        .then((response) => {
+          if (isUnMounted.current) {
+            return;
+          }
 
-        const { success, error, data } = response;
-        if (success) {
-          setError(undefined);
-          setData(onSuccess ? onSuccess(data, ...args) : data);
-        } else {
-          const _error = onFail ? onFail(error!, ...args) : error;
-          setError(_error);
-        }
-      })
-      .catch((_error) => {
-        console.log("useApi:unhandled api call error: ", error);
-      })
-      .finally(() => {
-        if (!isUnMounted.current) {
-          setLoading(false);
-        }
-      });
-  };
+          const { success, error, data } = response;
+          if (success) {
+            setError(undefined);
+            setData(onSuccess ? onSuccess(data, ...args) : data);
+          } else {
+            const _error = onFail ? onFail(error!, ...args) : error;
+            setError(_error);
+          }
+        })
+        .catch((_error) => {
+          console.log("useApi:unhandled api call error: ", error);
+        })
+        .finally(() => {
+          if (!isUnMounted.current) {
+            setLoading(false);
+          }
+        });
+    },
+    [apiFunc, error, onFail, onSuccess]
+  );
 
   return {
     request,

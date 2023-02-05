@@ -1,4 +1,4 @@
 export default interface LoginRequest {
-  mobile: string;
+  username: string;
   password: string;
 }

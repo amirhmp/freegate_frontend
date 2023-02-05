@@ -6,14 +6,20 @@ const Loading = () => {
   return (
     <Box
       sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "80vh",
-        fontFamily: "iransans",
+        height: "100vh",
+        background: "rgb(30 41 59)",
       }}
     >
-      <CircularProgress />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "80%",
+        }}
+      >
+        <CircularProgress />
+      </Box>
     </Box>
   );
 };

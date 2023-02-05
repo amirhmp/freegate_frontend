@@ -1,15 +1,13 @@
-import User from "@models/User";
-
 const key = "auth";
 
-const getUserFromStore = (): User | undefined => {
-  const userJSON = localStorage.getItem(key);
-  if (userJSON) return JSON.parse(userJSON) as User;
+const getTokenFromStore = (): string | undefined => {
+  const token = localStorage.getItem(key);
+  if (token) return token;
   return undefined;
 };
 
-const storeUser = (user: User) => {
-  localStorage.setItem(key, JSON.stringify(user));
+const storeToken = (token: string) => {
+  localStorage.setItem(key, token);
 };
 
 const removeUser = () => {
@@ -17,8 +15,8 @@ const removeUser = () => {
 };
 
 const authStorage = {
-  getUserFromStore,
-  storeUser,
+  getTokenFromStore,
+  storeToken,
   removeUser,
 };
 

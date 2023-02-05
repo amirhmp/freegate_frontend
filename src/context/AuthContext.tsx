@@ -1,11 +1,10 @@
 import React, { Dispatch, ReactNode, SetStateAction, useState } from "react";
-import { useContext } from "react";
-import User from "../models/User";
+import { useContext } from "react"; 
 import authStorage from "./authStorage";
 
 interface AuthContextProvidedType {
-  user: User | undefined;
-  setUser: Dispatch<SetStateAction<User | undefined>>;
+  token: string | undefined;
+  setToken: Dispatch<SetStateAction<string | undefined>>;
 }
 
 const AuthContext = React.createContext<AuthContextProvidedType>(undefined!);
@@ -13,10 +12,10 @@ const AuthContext = React.createContext<AuthContextProvidedType>(undefined!);
 const AuthContextProvider: React.FC<{
   children: ReactNode;
 }> = ({ children }) => {
-  const _user = authStorage.getUserFromStore();
-  const [user, setUser] = useState<User | undefined>(_user);
+  const _token = authStorage.getTokenFromStore();
+  const [token, setToken] = useState<string | undefined>(_token);
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ token, setToken }}>
       {children}
     </AuthContext.Provider>
   );
