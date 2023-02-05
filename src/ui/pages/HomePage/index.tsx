@@ -10,6 +10,7 @@ import "./index.css";
 import ExitIcon from "@mui/icons-material/ExitToApp";
 import { Fab } from "@mui/material";
 import useAuth from "@context/useAuth";
+import Clipboard from "react-clipboard.js";
 
 const roles = [
   { label: "مدیریت", role: Role.Admin },
@@ -124,7 +125,20 @@ const HomePage = () => {
                 }}
               >
                 {response.data!.links.map((l, i) => (
-                  <Button
+                  <Clipboard
+                    data-clipboard-text={l.link}
+                    className="iransans clickable"
+                    style={{
+                      color: "dodgerblue",
+                      border: "1px solid dodgerblue",
+                      borderRadius: 8, 
+                      padding: 10,
+                      width: "100%",
+                    }}
+                  >
+                    {l.title}
+                  </Clipboard>
+                  /*<Button
                     key={l.title}
                     fullWidth={true}
                     variant="outlined"
@@ -134,7 +148,7 @@ const HomePage = () => {
                     }}
                   >
                     {l.title}
-                  </Button>
+                  </Button> */
                 ))}
               </Box>
             </>
