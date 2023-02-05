@@ -26,7 +26,7 @@ const HomePage = () => {
     request: fetchDashboard,
     error,
   } = useApi(RemoteRepo.fetchDashboard, undefined, (error) => {
-    toast.error("خطا در دریافت مراکز از سرور");
+    toast.error("خطا در دریافت اطلاعات از سرور");
     return error;
   });
 
@@ -127,11 +127,13 @@ const HomePage = () => {
                 {response.data!.links.map((l, i) => (
                   <Clipboard
                     data-clipboard-text={l.link}
+                    onSuccess={() => toast.success("کانفیگ کپی شد")}
+                    onError={() => toast.error("خطا در کپی کردن کانفیگ")}
                     className="iransans clickable"
                     style={{
                       color: "dodgerblue",
                       border: "1px solid dodgerblue",
-                      borderRadius: 8, 
+                      borderRadius: 8,
                       padding: 10,
                       width: "100%",
                     }}
