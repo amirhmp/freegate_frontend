@@ -44,6 +44,7 @@ const HomePage = () => {
           background: "rgb(30 41 59)",
           color: "white",
           textAlign: "center",
+          overflow: "hidden",
         }}
       >
         <Box
@@ -125,6 +126,7 @@ const HomePage = () => {
               >
                 {response.data!.links.map((l, i) => (
                   <Clipboard
+                    key={i}
                     data-clipboard-text={l.link}
                     onSuccess={() => toast.success("کانفیگ کپی شد")}
                     onError={() => toast.error("خطا در کپی کردن کانفیگ")}

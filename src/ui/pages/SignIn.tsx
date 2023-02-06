@@ -1,6 +1,5 @@
 import backgroundImage4 from "@assets/pics/bg4.jpg";
 import AppRoutes from "@constants/appRoutes";
-import Role from "@constants/Role";
 import useAuth from "@context/useAuth";
 import useApi from "@hooks/useApi";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -25,8 +24,8 @@ export default function SignIn() {
 
   const { request: userLogin, isLoading: isRequesting } = useApi(
     RemoteRepo.login,
-    (token) => {
-      login(token);
+    (authInfo) => {
+      login(authInfo);
       toast.dismiss();
       navigate(AppRoutes.Home);
       return undefined;

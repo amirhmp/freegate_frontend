@@ -1,18 +1,19 @@
+import IAuthInfo from "@models/AuthInfo";
 import { useInternalAuthContext } from "./AuthContext";
 import authStorage from "./authStorage";
 
 const useAuth = () => {
-  const { token, setToken } = useInternalAuthContext();
+  const { authInfo, setAuthInfo } = useInternalAuthContext();
 
-  const login = (token: string) => {
-    authStorage.storeToken(token);
-    setToken(token);
+  const login = (authInfo: IAuthInfo) => {
+    authStorage.storeToken(authInfo);
+    setAuthInfo(authInfo);
   };
   const logout = () => {
     authStorage.removeUser();
-    setToken(undefined);
+    setAuthInfo(undefined);
   };
-  return { token, login, logout };
+  return { authInfo, login, logout };
 };
 
 export default useAuth;

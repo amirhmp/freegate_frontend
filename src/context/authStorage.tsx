@@ -1,13 +1,20 @@
+import IAuthInfo from "@models/AuthInfo";
+
 const key = "auth";
 
-const getTokenFromStore = (): string | undefined => {
-  const token = localStorage.getItem(key);
-  if (token) return token;
-  return undefined;
+const getTokenFromStore = (): IAuthInfo | undefined => {
+  const authInfo = localStorage.getItem(key);
+  try {
+    if (authInfo) return JSON.parse(authInfo);
+    return undefined;
+  } catch (ex) {
+    removeUser();
+    return undefined;
+  }
 };
 
-const storeToken = (token: string) => {
-  localStorage.setItem(key, token);
+const storeToken = (authInfo: IAuthInfo) => {
+  localStorage.setItem(key, JSON.stringify(authInfo));
 };
 
 const removeUser = () => {
