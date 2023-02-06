@@ -1,16 +1,15 @@
 import Loading from "@components/common/Loading";
 import Role from "@constants/Role";
+import useAuth from "@context/useAuth";
 import useApi from "@hooks/useApi";
+import ExitIcon from "@mui/icons-material/ExitToApp";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import RemoteRepo from "@services/RemoteRepo";
 import { useEffect } from "react";
+import Clipboard from "react-clipboard.js";
 import { toast } from "react-toastify";
 import "./index.css";
-import ExitIcon from "@mui/icons-material/ExitToApp";
-import { Fab } from "@mui/material";
-import useAuth from "@context/useAuth";
-import Clipboard from "react-clipboard.js";
 
 const roles = [
   { label: "مدیریت", role: Role.Admin },
