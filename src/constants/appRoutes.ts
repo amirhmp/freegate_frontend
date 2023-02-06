@@ -1,8 +1,7 @@
 enum AppRoutes {
   Home = "/home",
   NotFound = "/not-found",
-  Login = "/login",
-  Profile = "/profile",
+  Login = "/login", 
   Forbidden = "/forbidden",
 }
 

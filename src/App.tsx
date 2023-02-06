@@ -3,11 +3,11 @@ import AppRoutes from "@constants/appRoutes";
 import useAuth from "@context/useAuth";
 import Forbidden from "@pages/Forbidden";
 import HomePage from "@pages/HomePage";
-import SignIn from "@pages/SignIn";
 import NotFound from "@pages/notFound";
+import SignIn from "@pages/SignIn";
 import { ApiClientConfig } from "@services/apiclient/ApiClient";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "./App.css";
 
 const App = () => {
@@ -39,7 +39,7 @@ const App = () => {
           <Route path={AppRoutes.Forbidden} element={<Forbidden />} />
           <Route
             path={AppRoutes.Login}
-            element={token ? <Navigate to={AppRoutes.Profile} /> : <SignIn />}
+            element={token ? <Navigate to={AppRoutes.Home} /> : <SignIn />}
           />
           <Route path="/" element={<Navigate replace to={AppRoutes.Home} />} />
           <Route
