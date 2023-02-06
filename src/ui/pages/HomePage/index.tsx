@@ -130,6 +130,7 @@ const HomePage = () => {
                     onError={() => toast.error("خطا در کپی کردن کانفیگ")}
                     className="iransans clickable"
                     style={{
+                      overflow: "hidden",
                       color: "dodgerblue",
                       border: "1px solid dodgerblue",
                       borderRadius: 8,
