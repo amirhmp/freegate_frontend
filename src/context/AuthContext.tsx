@@ -1,7 +1,7 @@
 import IAuthInfo from "@models/AuthInfo";
+import LocalRepo from "@services/local/LocalRepo";
 import React, { Dispatch, ReactNode, SetStateAction, useState } from "react";
 import { useContext } from "react";
-import authStorage from "./authStorage";
 
 interface AuthContextProvidedType {
   authInfo: IAuthInfo | undefined;
@@ -13,7 +13,7 @@ const AuthContext = React.createContext<AuthContextProvidedType>(undefined!);
 const AuthContextProvider: React.FC<{
   children: ReactNode;
 }> = ({ children }) => {
-  const _authInfo = authStorage.getTokenFromStore();
+  const _authInfo = LocalRepo.auth.load();
   const [authInfo, setAuthInfo] = useState<IAuthInfo | undefined>(_authInfo);
   return (
     <AuthContext.Provider value={{ authInfo, setAuthInfo }}>

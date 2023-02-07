@@ -6,7 +6,7 @@ import Forbidden from "@pages/Forbidden";
 import HomePage from "@pages/HomePage";
 import NotFound from "@pages/notFound";
 import SignIn from "@pages/SignIn";
-import { ApiClientConfig } from "@services/apiclient/ApiClient";
+import { ApiClientConfig } from "@services/remote/apiclient/ApiClient";
 import AdminPage from "@ui/pages/AdminPage";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";

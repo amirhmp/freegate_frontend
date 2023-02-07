@@ -1,7 +1,7 @@
 import { BASE_API_URL } from "@config";
 import { ApiResult, failed, succeed } from "@models/ApiResult";
 import LoginRequest from "@models/DTOs/api/LoginRequest";
-import HttpService from "@services/HttpService";
+import HttpService from "@services/remote/HttpService";
 import z from "zod";
 import IApiClient from "./IApiClient";
 import {

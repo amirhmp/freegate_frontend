@@ -1,16 +1,16 @@
 import IAuthInfo from "@models/AuthInfo";
-import { useInternalAuthContext } from "./AuthContext";
-import authStorage from "./authStorage";
+import LocalRepo from "@services/local/LocalRepo";
+import { useInternalAuthContext } from "./AuthContext"; 
 
 const useAuth = () => {
   const { authInfo, setAuthInfo } = useInternalAuthContext();
 
   const login = (authInfo: IAuthInfo) => {
-    authStorage.storeToken(authInfo);
+    LocalRepo.auth.save(authInfo);
     setAuthInfo(authInfo);
   };
   const logout = () => {
-    authStorage.removeUser();
+    LocalRepo.auth.remove();
     setAuthInfo(undefined);
   };
   return { authInfo, login, logout };

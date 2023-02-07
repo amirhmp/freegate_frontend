@@ -5,7 +5,7 @@ import useApi from "@hooks/useApi";
 import ExitIcon from "@mui/icons-material/ExitToApp";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import RemoteRepo from "@services/RemoteRepo";
+import RemoteRepo from "@services/remote/RemoteRepo";
 import { useEffect } from "react";
 import Clipboard from "react-clipboard.js";
 import { toast } from "react-toastify";
@@ -98,7 +98,7 @@ const HomePage = () => {
               >
                 <div>
                   <div>حجم مانده</div>
-                  <div>{`${response.data!.remainGB}GB`}</div>
+                  <div>{response.data!.remainGB}</div>
                 </div>
                 <div>
                   <div>وضعیت حساب</div>

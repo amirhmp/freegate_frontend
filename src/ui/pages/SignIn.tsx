@@ -12,7 +12,7 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import RemoteRepo from "@services/RemoteRepo";
+import RemoteRepo from "@services/remote/RemoteRepo";
 import RtlMui from "@ui/components/common/RtlMui";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";

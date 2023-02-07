@@ -1,7 +1,7 @@
 import useApi from "@hooks/useApi";
 import { CircularProgress } from "@mui/material";
 import Button from "@mui/material/Button";
-import RemoteRepo from "@services/RemoteRepo";
+import RemoteRepo from "@services/remote/RemoteRepo";
 import React from "react";
 import { toast } from "react-toastify";
 

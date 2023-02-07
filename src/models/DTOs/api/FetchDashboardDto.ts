@@ -16,7 +16,7 @@ export const FetchDashboardDtoType = z.object({
   data: z.object({
     xray_account: z.string(),
     remainDays: z.number(),
-    remainGB: z.number(),
+    remainGB: z.string(),
     enable: z.boolean(),
     links: z.array(LinkType),
     os: z.string(),
