@@ -24,8 +24,14 @@ const AdminPage = () => {
 
   return (
     <div className="h-screen bg-slate-900 p-2">
-      <Button className="w-24 h-12" variant="contained" onClick={handleSync}>
-        {!isLoading ? "Sync" : <CircularProgress size={16} color="warning" />}
+      {/* <NestedTable data={} schema={[]} /> */}
+
+      <Button
+        className="w-24 h-12 absolute top-1 left-1"
+        variant="contained"
+        onClick={handleSync}
+      >
+        {isLoading ? <CircularProgress size={16} color="warning" /> : "Sync"}
       </Button>
     </div>
   );

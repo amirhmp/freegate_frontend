@@ -10,6 +10,7 @@ import {
 } from "@models/DTOs/api/FetchDashboardDto";
 import jwtDecode from "jwt-decode";
 import IAuthInfo from "@models/AuthInfo";
+import User from "@models/User";
 
 const service = new HttpService(BASE_API_URL);
 
@@ -49,6 +50,9 @@ const ApiClient: IApiClient = {
       method: "post",
       validator: z.object({ message: z.string() }),
     });
+  },
+  getAllUsers: (): Promise<ApiResult<User>> => {
+    throw new Error("Function not implemented.");
   },
 };
 

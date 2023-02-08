@@ -1,5 +1,6 @@
 import backgroundImage4 from "@assets/pics/bg4.jpg";
 import AppRoutes from "@constants/appRoutes";
+import Role from "@constants/Role";
 import useAuth from "@context/useAuth";
 import useApi from "@hooks/useApi";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -27,7 +28,9 @@ export default function SignIn() {
     (authInfo) => {
       login(authInfo);
       toast.dismiss();
-      navigate(AppRoutes.Home);
+      console.log(authInfo.roleId);
+      if (authInfo.roleId === Role.Admin) navigate(AppRoutes.Admin);
+      else navigate(AppRoutes.Home);
       return undefined;
     },
     (error) => {
