@@ -2,7 +2,6 @@ import Loading from "@components/common/Loading";
 import Role from "@constants/Role";
 import useAuth from "@context/useAuth";
 import useApi from "@hooks/useApi";
-import ExitIcon from "@mui/icons-material/ExitToApp";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import RemoteRepo from "@services/remote/RemoteRepo";
@@ -10,6 +9,7 @@ import { useEffect } from "react";
 import Clipboard from "react-clipboard.js";
 import { toast } from "react-toastify";
 import "./index.css";
+import Appbar from "@ui/components/app/Appbar";
 
 const roles = [
   { label: "مدیریت", role: Role.Admin },
@@ -47,22 +47,10 @@ const HomePage = () => {
           overflow: "hidden",
         }}
       >
-        <Box
-          sx={{
-            height: "48px",
-            background: "rgb(15 23 42)",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            boxShadow: "0 0 12px 0 rgba(0,0,0,0.2)",
-            padding: "0 8px",
-            fontSize: 14,
-          }}
-        >
-          <ExitIcon sx={{ cursor: "pointer" }} onClick={logout} />
-
-          <div>{response?.data?.name || ""}</div>
-        </Box>
+        <Appbar
+          username={response?.data?.name || ""}
+          onLogoutClicked={logout}
+        />
         <Box
           sx={{
             margin: "10px auto",

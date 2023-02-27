@@ -1,11 +1,15 @@
+import useAuth from "@context/useAuth";
 import useApi from "@hooks/useApi";
 import { CircularProgress } from "@mui/material";
 import Button from "@mui/material/Button";
 import RemoteRepo from "@services/remote/RemoteRepo";
+import Appbar from "@ui/components/app/Appbar";
 import React from "react";
 import { toast } from "react-toastify";
 
 const AdminPage = () => {
+  const { logout } = useAuth();
+
   const { isLoading, request: sync } = useApi(
     RemoteRepo.sync,
     ({ message }) => {
@@ -23,16 +27,14 @@ const AdminPage = () => {
   }, [isLoading, sync]);
 
   return (
-    <div className="h-screen bg-slate-900 p-2">
+    <div className="h-screen bg-slate-800">
       {/* <NestedTable data={} schema={[]} /> */}
-
-      <Button
-        className="w-24 h-12 absolute top-1 left-1"
-        variant="contained"
-        onClick={handleSync}
-      >
-        {isLoading ? <CircularProgress size={16} color="warning" /> : "Sync"}
-      </Button>
+      <Appbar username="" onLogoutClicked={logout} />
+      <div className="p-2">
+        <Button variant="contained" onClick={handleSync} className="w-24 h-12">
+          {isLoading ? <CircularProgress size={16} color="warning" /> : "Sync"}
+        </Button>
+      </div>
     </div>
   );
 };

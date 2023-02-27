@@ -25,7 +25,7 @@ export default class HttpService {
 
   constructor(private baseURL: string) {
     this._axios = axios.create();
-    this._axios.defaults.timeout = 20000;
+    this._axios.defaults.timeout = 60000;
     if (NODE_ENV === "development") {
       this._axios.interceptors.request.use(
         AxiosLogger.requestLogger,
