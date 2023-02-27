@@ -1,5 +1,5 @@
 {
-  "name": "freegate-backend",
+  "name": "freegate",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

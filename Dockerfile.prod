@@ -1,0 +1,16 @@
+#Build
+FROM node:18.14.2-alpine3.17 as build-stage
+WORKDIR /app
+COPY package*.json .
+RUN npm install
+COPY . .
+ENV BASE_API_URL=https://backend.com:8080
+RUN npm run build
+
+# Production
+FROM nginx:stable-alpine
+# RUN addgroup app && adduser -S -G app app
+# USER app
+COPY --from=build-stage /app/build /usr/share/nginx/html
+EXPOSE 80
+ENTRYPOINT [ "nginx", "-g", "daemon off;" ]
